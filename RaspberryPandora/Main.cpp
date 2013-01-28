@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
-#include "PandoraAPI.h"
+#include "APIWrapper.h"
 
 using namespace std;
 
@@ -23,7 +23,7 @@ int main() {
 	cout << "Enter your password: ";
     cin >> password;
     
-    PandoraAPI api (username, password);
+    APIWrapper api (username, password);
     api.logOut();
     
     return 0;

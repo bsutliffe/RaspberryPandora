@@ -34,7 +34,10 @@ include Makefile
 OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
-OBJECTFILES=
+OBJECTFILES= \
+	${OBJECTDIR}/Blowfish/BlowFish.o \
+	${OBJECTDIR}/APIWrapper.o \
+	${OBJECTDIR}/Main.o
 
 
 # C Compiler Flags
@@ -51,7 +54,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=-ljson_linux-gcc-4.2.1_libmt
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -59,7 +62,22 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/raspberrypandora: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/raspberrypandora ${OBJECTFILES} ${LDLIBSOPTIONS} 
+	${LINK.cc} -lcurl -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/raspberrypandora ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/Blowfish/BlowFish.o: Blowfish/BlowFish.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Blowfish
+	${RM} $@.d
+	$(COMPILE.cc) -g -I/usr/local/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/Blowfish/BlowFish.o Blowfish/BlowFish.cpp
+
+${OBJECTDIR}/APIWrapper.o: APIWrapper.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -I/usr/local/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/APIWrapper.o APIWrapper.cpp
+
+${OBJECTDIR}/Main.o: Main.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -I/usr/local/include -MMD -MP -MF $@.d -o ${OBJECTDIR}/Main.o Main.cpp
 
 # Subprojects
 .build-subprojects:

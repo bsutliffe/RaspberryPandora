@@ -26,8 +26,10 @@ private:
 	string partnerAuthToken;
 	string userAuthToken;
 	int syncTime;
+	int startTime;
 	CBlowFish* encryptor;
 	CBlowFish* decryptor;
+	void standardSetup();
 	bool partnerLogin();
 	string makeRequest(string, string, bool);
 	void decryptSyncTime(const char*);

@@ -10,7 +10,6 @@
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList>
-                <sourceRootElem>../../../Downloads/Blowfish</sourceRootElem>
                 <sourceRootElem>Blowfish</sourceRootElem>
             </sourceRootList>
             <confList>

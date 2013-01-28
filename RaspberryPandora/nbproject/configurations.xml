@@ -4,7 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>APIWrapper.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -19,6 +18,7 @@
         <itemPath>Blowfish/Blowfish.opt</itemPath>
       </logicalFolder>
       <itemPath>APIWrapper.cpp</itemPath>
+      <itemPath>APIWrapper.h</itemPath>
       <itemPath>Main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -34,7 +34,6 @@
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
-    <Elem>../../../Downloads/Blowfish</Elem>
     <Elem>Blowfish</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
@@ -49,12 +48,15 @@
           <incDir>
             <pElem>/usr/local/include</pElem>
           </incDir>
+          <commandLine>-lcurl</commandLine>
         </ccTool>
         <linkerTool>
+          <linkerAddLib>
+            <pElem>/usr/local/lib</pElem>
+          </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>json_linux-gcc-4.2.1_libmt</linkerLibLibItem>
           </linkerLibItems>
-          <commandLine>-lcurl</commandLine>
         </linkerTool>
       </compileType>
     </conf>

@@ -23,22 +23,40 @@ namespace {
 		((string*)stream)->append((char*)ptr, 0, size*count);
 		return size*count;
 	}
+	
+	char *strToHex(unsigned char *str, int len){
+		char *buffer = new char[len*2+1];
+		char *pbuffer = buffer;
+		for(int i = 0; i < len ; ++i ){
+		  sprintf(pbuffer, "%02X", str[i]);
+		  pbuffer += 2;
+		}
+		return buffer;
+	}
 }
 
 APIWrapper::APIWrapper() {
-	encryptor = new CBlowFish((unsigned char*)"6#26FRL$ZWD", (size_t)11);
-	decryptor = new CBlowFish((unsigned char*)"R=U!LH$O2B#", (size_t)11);
+	standardSetup();
 	partnerLogin();
 }
 
 APIWrapper::APIWrapper(string userName, string password){
-	APIWrapper();
+	standardSetup();
+	partnerLogin();
 	userLogin(userName, password);
 }
 
 APIWrapper::~APIWrapper() {
 	//delete encryptor;
 	//delete decryptor;
+}
+
+void APIWrapper::standardSetup(){
+	time_t seconds;
+	seconds = time(NULL);
+	startTime = static_cast<int>(seconds);
+	encryptor = new CBlowFish((unsigned char*)"6#26FRL$ZWD", (size_t)11);
+	decryptor = new CBlowFish((unsigned char*)"R=U!LH$O2B#", (size_t)11);
 }
 
 bool APIWrapper::partnerLogin(){
@@ -64,21 +82,26 @@ bool APIWrapper::partnerLogin(){
 }
 
 bool APIWrapper::userLogin(string userName, string password){
+	time_t now;
+	now = time(NULL);
+	int curSyncTime = syncTime + (static_cast<int>(now) - startTime);
 	string data = "{"
 		"\"loginType\": \"user\","
 		"\"username\":\"" + userName + "\","
 		"\"password\":\"" + password + "\","
 		"\"partnerAuthToken\":\"" + partnerAuthToken + "\","
-		"\"syncTime\": " + boost::lexical_cast<string>(syncTime) + ""
+		"\"syncTime\": " + boost::lexical_cast<string>(curSyncTime) + ""
 	"}";
-
-	string response = makeRequest("http://tuner.pandora.com/services/json/?method=auth.userLogin&auth_token=" + partnerAuthToken + "&partner_id=" + partnerId, data, true);
+	cout << partnerAuthToken << endl;
+	string response = makeRequest("http://tuner.pandora.com/services/json/?method=auth.userLogin&auth_token=" +  boost::lexical_cast<string>(curl_escape(partnerAuthToken.c_str(), partnerAuthToken.length())) + "&partner_id=" + partnerId, data, true);
+	cout << response << endl;
 	Json::Value root;
 	Json::Reader reader;
 	bool parsingSuccessful = reader.parse(response, root);
 	if(!parsingSuccessful)
 		return false;
-	
+	if(root["stat"] != "ok")
+		return false;
 	return true;
 }
     
@@ -87,6 +110,14 @@ void APIWrapper::logOut(){
 }
 
 string APIWrapper::makeRequest(string url, string body, bool encrypt){
+	cout << body << endl;
+	if(encrypt){
+		char encrypted[1024];
+		memset(encrypted, 0, 1024);
+		encryptor->Encrypt((unsigned char*)body.c_str(), (unsigned char*)encrypted, 1024, CBlowFish::ECB);
+		body = strToHex((unsigned char*)encrypted, 1024);
+		cout << body << endl;
+	}
 	CURL *curl = curl_easy_init();
 	string response;
 	struct curl_slist *headers = NULL;
@@ -108,10 +139,10 @@ string APIWrapper::makeRequest(string url, string body, bool encrypt){
 
 void APIWrapper::decryptSyncTime(const char* encrypted){
 	try{
-		unsigned char* decrypted;
-		decryptor->Decrypt(decrypted, (unsigned char*)encrypted, 64, CBlowFish::ECB);
+		char decrypted[16];
+		memset(decrypted, 0, 16);
+		decryptor->Decrypt((unsigned char*)decrypted, (unsigned char*)encrypted, 16, CBlowFish::ECB);
 		sscanf((const char*)decrypted, "%d", &syncTime);
-		cout << syncTime << endl;
 	} catch(int e) {
 		switch(e){
 			case 1:

@@ -44,8 +44,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-lcurl
+CXXFLAGS=-lcurl
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -54,7 +54,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-ljson_linux-gcc-4.2.1_libmt
+LDLIBSOPTIONS=-L/usr/local/lib -ljson_linux-gcc-4.2.1_libmt
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -62,7 +62,7 @@ LDLIBSOPTIONS=-ljson_linux-gcc-4.2.1_libmt
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/raspberrypandora: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -lcurl -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/raspberrypandora ${OBJECTFILES} ${LDLIBSOPTIONS} 
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/raspberrypandora ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/Blowfish/BlowFish.o: Blowfish/BlowFish.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Blowfish

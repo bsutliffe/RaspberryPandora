@@ -19,19 +19,73 @@
 using namespace std;
 
 namespace {
+
 	size_t write_to_string(void *ptr, size_t size, size_t count, void *stream) {
-		((string*)stream)->append((char*)ptr, 0, size*count);
+		((string*) stream)->append((char*) ptr, 0, size * count);
 		return size*count;
 	}
-	
-	char *strToHex(unsigned char *str, int len){
-		char *buffer = new char[len*2+1];
-		char *pbuffer = buffer;
-		for(int i = 0; i < len ; ++i ){
-		  sprintf(pbuffer, "%02X", str[i]);
-		  pbuffer += 2;
+
+	//Function to convert unsigned char to string of length 2
+
+	void Char2Hex(const unsigned char ch, char* szHex) {
+		unsigned char byte[2];
+		byte[0] = ch / 16;
+		byte[1] = ch % 16;
+		for (int i = 0; i < 2; i++) {
+			if (byte[i] >= 0 && byte[i] <= 9)
+				szHex[i] = '0' + byte[i];
+			else
+				szHex[i] = 'A' + byte[i] - 10;
 		}
-		return buffer;
+		szHex[2] = 0;
+	}
+
+	//Function to convert string of length 2 to unsigned char
+
+	void Hex2Char(const char* szHex, unsigned char& rch) {
+		rch = 0;
+		for (int i = 0; i < 2; i++) {
+			if (*(szHex + i) >= '0' && *(szHex + i) <= '9')
+				rch = (rch << 4) + (*(szHex + i) - '0');
+			else if (*(szHex + i) >= 'A' && *(szHex + i) <= 'F')
+				rch = (rch << 4) + (*(szHex + i) - 'A' + 10);
+			else
+				break;
+		}
+	}
+
+	//Function to convert string of unsigned chars to string of chars
+
+	void CharStr2HexStr(const unsigned char* pucCharStr, char* pszHexStr, int iSize) {
+		int i;
+		char szHex[3];
+		pszHexStr[0] = 0;
+		for (i = 0; i < iSize; i++) {
+			Char2Hex(pucCharStr[i], szHex);
+			strcat(pszHexStr, szHex);
+		}
+	}
+
+	//Function to convert string of chars to string of unsigned chars
+
+	void HexStr2CharStr(const char* pszHexStr, unsigned char* pucCharStr, int iSize) {
+		int i;
+		unsigned char ch;
+		for (i = 0; i < iSize; i++) {
+			Hex2Char(pszHexStr + 2 * i, ch);
+			pucCharStr[i] = ch;
+		}
+	}
+
+	int roundUp(int numToRound, int multiple) {
+		if (multiple == 0) {
+			return numToRound;
+		}
+
+		int remainder = numToRound % multiple;
+		if (remainder == 0)
+			return numToRound;
+		return numToRound + multiple - remainder;
 	}
 }
 
@@ -40,7 +94,7 @@ APIWrapper::APIWrapper() {
 	partnerLogin();
 }
 
-APIWrapper::APIWrapper(string userName, string password){
+APIWrapper::APIWrapper(string userName, string password) {
 	standardSetup();
 	partnerLogin();
 	userLogin(userName, password);
@@ -51,29 +105,29 @@ APIWrapper::~APIWrapper() {
 	//delete decryptor;
 }
 
-void APIWrapper::standardSetup(){
+void APIWrapper::standardSetup() {
 	time_t seconds;
 	seconds = time(NULL);
-	startTime = static_cast<int>(seconds);
-	encryptor = new CBlowFish((unsigned char*)"6#26FRL$ZWD", (size_t)11);
-	decryptor = new CBlowFish((unsigned char*)"R=U!LH$O2B#", (size_t)11);
+	startTime = static_cast<int> (seconds);
+	encryptor = new CBlowFish((unsigned char*) "6#26FRL$ZWD", (size_t) 11);
+	decryptor = new CBlowFish((unsigned char*) "R=U!LH$O2B#", (size_t) 11);
 }
 
-bool APIWrapper::partnerLogin(){
+bool APIWrapper::partnerLogin() {
 	string data = "{"
-		"\"username\": \"android\","
-		"\"password\": \"AC7IBG09A3DTSYM4R41UJWL07VLN8JI7\","
-		"\"deviceModel\": \"android-generic\","
-		"\"version\": \"5\""
-	"}";
+			"\"username\": \"android\","
+			"\"password\": \"AC7IBG09A3DTSYM4R41UJWL07VLN8JI7\","
+			"\"deviceModel\": \"android-generic\","
+			"\"version\": \"5\""
+			"}";
 
 	string response = makeRequest("http://tuner.pandora.com/services/json/?method=auth.partnerLogin", data, false);
 	Json::Value root;
 	Json::Reader reader;
 	bool parsingSuccessful = reader.parse(response, root);
-	if(!parsingSuccessful)
+	if (!parsingSuccessful)
 		return false;
-	if(root["stat"] != "ok")
+	if (root["stat"] != "ok")
 		return false;
 	partnerId = root["result"]["partnerId"].asString();
 	partnerAuthToken = root["result"]["partnerAuthToken"].asString();
@@ -81,70 +135,76 @@ bool APIWrapper::partnerLogin(){
 	return true;
 }
 
-bool APIWrapper::userLogin(string userName, string password){
+bool APIWrapper::userLogin(string userName, string password) {
 	time_t now;
 	now = time(NULL);
-	int curSyncTime = syncTime + (static_cast<int>(now) - startTime);
+	int curSyncTime = syncTime + (static_cast<int> (now) - startTime);
 	string data = "{"
-		"\"loginType\": \"user\","
-		"\"username\":\"" + userName + "\","
-		"\"password\":\"" + password + "\","
-		"\"partnerAuthToken\":\"" + partnerAuthToken + "\","
-		"\"syncTime\": " + boost::lexical_cast<string>(curSyncTime) + ""
-	"}";
-	cout << partnerAuthToken << endl;
-	string response = makeRequest("http://tuner.pandora.com/services/json/?method=auth.userLogin&auth_token=" +  boost::lexical_cast<string>(curl_escape(partnerAuthToken.c_str(), partnerAuthToken.length())) + "&partner_id=" + partnerId, data, true);
+			"\"loginType\": \"user\","
+			"\"username\":\"" + userName + "\","
+			"\"password\":\"" + password + "\","
+			"\"partnerAuthToken\":\"" + partnerAuthToken + "\","
+			"\"syncTime\": " + boost::lexical_cast<string > (curSyncTime) + ""
+			"}";
+	string response = makeRequest("http://tuner.pandora.com/services/json/?method=auth.userLogin&auth_token=" + boost::lexical_cast<string > (curl_escape(partnerAuthToken.c_str(), partnerAuthToken.length())) + "&partner_id=" + partnerId, data, true);
 	cout << response << endl;
 	Json::Value root;
 	Json::Reader reader;
 	bool parsingSuccessful = reader.parse(response, root);
-	if(!parsingSuccessful)
+	if (!parsingSuccessful)
 		return false;
-	if(root["stat"] != "ok")
+	if (root["stat"] != "ok")
 		return false;
 	return true;
 }
-    
-void APIWrapper::logOut(){
+
+void APIWrapper::logOut() {
 	cout << "Logging Out" << endl;
 }
 
-string APIWrapper::makeRequest(string url, string body, bool encrypt){
-	cout << body << endl;
-	if(encrypt){
-		char encrypted[1024];
-		memset(encrypted, 0, 1024);
-		encryptor->Encrypt((unsigned char*)body.c_str(), (unsigned char*)encrypted, 1024, CBlowFish::ECB);
-		body = strToHex((unsigned char*)encrypted, 1024);
-		cout << body << endl;
+string APIWrapper::makeRequest(string url, string body, bool encrypt) {
+	if (encrypt) {
+		int len = roundUp(strlen(body.c_str()), 8);
+		char encrypted[len];
+		char hex[len];
+		memset(encrypted, 0, len);
+		encryptor->Encrypt((unsigned char*) body.c_str(), (unsigned char*) encrypted, len, CBlowFish::ECB);
+		CharStr2HexStr((unsigned char*) encrypted, hex, len);
+		body = boost::lexical_cast<string > ((const char*) hex);
 	}
 	CURL *curl = curl_easy_init();
 	string response;
 	struct curl_slist *headers = NULL;
-    headers = curl_slist_append(headers, "Accept: application/json");
-    headers = curl_slist_append(headers, "Content-Type: application/json");
-    headers = curl_slist_append(headers, "charsets: utf-8");
+	headers = curl_slist_append(headers, "Accept: application/json");
+	headers = curl_slist_append(headers, "Content-Type: application/json");
+	headers = curl_slist_append(headers, "charsets: utf-8");
 	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 	curl_easy_setopt(curl, CURLOPT_HTTPPOST, 1);
 	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
-    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_to_string);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
-	
+
 	CURLcode res = curl_easy_perform(curl);
 	curl_easy_cleanup(curl);
-	
+
 	return response;
 }
 
-void APIWrapper::decryptSyncTime(const char* encrypted){
-	try{
-		char decrypted[16];
-		memset(decrypted, 0, 16);
-		decryptor->Decrypt((unsigned char*)decrypted, (unsigned char*)encrypted, 16, CBlowFish::ECB);
-		sscanf((const char*)decrypted, "%d", &syncTime);
-	} catch(int e) {
-		switch(e){
+void APIWrapper::decryptSyncTime(const char* encrypted) {
+	try {
+		cout << encrypted << endl;
+		char dehexed[32];
+		HexStr2CharStr(encrypted, (unsigned char*)dehexed, 32);
+		int len = roundUp(strlen(dehexed), 8);
+		char decrypted[len];
+		memset(decrypted, 0, len);
+		decryptor->Decrypt((const unsigned char*)dehexed, (unsigned char*)decrypted, len, CBlowFish::ECB);
+		cout << decrypted << endl;
+		sscanf((const char*) decrypted, "%d", &syncTime);
+		cout << syncTime << endl;
+	} catch (int e) {
+		switch (e) {
 			case 1:
 				cout << "Incorrect key length" << endl;
 				break;

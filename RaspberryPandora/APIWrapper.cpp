@@ -47,8 +47,8 @@ namespace {
 		for (int i = 0; i < 2; i++) {
 			if (*(szHex + i) >= '0' && *(szHex + i) <= '9')
 				rch = (rch << 4) + (*(szHex + i) - '0');
-			else if (*(szHex + i) >= 'A' && *(szHex + i) <= 'F')
-				rch = (rch << 4) + (*(szHex + i) - 'A' + 10);
+			else if (toupper(*(szHex + i)) >= 'A' && toupper(*(szHex + i)) <= 'F')
+				rch = (rch << 4) + (toupper(*(szHex + i)) - 'A' + 10);
 			else
 				break;
 		}
@@ -129,6 +129,7 @@ bool APIWrapper::partnerLogin() {
 		return false;
 	if (root["stat"] != "ok")
 		return false;
+	cout << response << endl;
 	partnerId = root["result"]["partnerId"].asString();
 	partnerAuthToken = root["result"]["partnerAuthToken"].asString();
 	decryptSyncTime(root["result"]["syncTime"].asCString());
@@ -140,12 +141,12 @@ bool APIWrapper::userLogin(string userName, string password) {
 	now = time(NULL);
 	int curSyncTime = syncTime + (static_cast<int> (now) - startTime);
 	string data = "{"
-			"\"loginType\": \"user\","
-			"\"username\":\"" + userName + "\","
-			"\"password\":\"" + password + "\","
-			"\"partnerAuthToken\":\"" + partnerAuthToken + "\","
-			"\"syncTime\": " + boost::lexical_cast<string > (curSyncTime) + ""
-			"}";
+		"\"loginType\":\"user\","
+		"\"username\":\"" + userName + "\","
+		"\"password\":\"" + password + "\","
+		"\"partnerAuthToken\":\"" + partnerAuthToken + "\","
+		"\"syncTime\":" + boost::lexical_cast<string > (curSyncTime) + ""
+	"}";
 	string response = makeRequest("http://tuner.pandora.com/services/json/?method=auth.userLogin&auth_token=" + boost::lexical_cast<string > (curl_escape(partnerAuthToken.c_str(), partnerAuthToken.length())) + "&partner_id=" + partnerId, data, true);
 	cout << response << endl;
 	Json::Value root;
@@ -163,15 +164,23 @@ void APIWrapper::logOut() {
 }
 
 string APIWrapper::makeRequest(string url, string body, bool encrypt) {
+	cout << url << endl;
 	if (encrypt) {
-		int len = roundUp(strlen(body.c_str()), 8);
+		const char* bodyChar = body.c_str();
+		cout << bodyChar << endl;
+		int len = roundUp(strlen(bodyChar), 8);
 		char encrypted[len];
-		char hex[len];
+		char hex[len*2];
+		char decrypted[len];
 		memset(encrypted, 0, len);
-		encryptor->Encrypt((unsigned char*) body.c_str(), (unsigned char*) encrypted, len, CBlowFish::ECB);
+		encryptor->Encrypt((const unsigned char*)body.c_str(), (unsigned char*) encrypted, len);
+		cout << encrypted << endl;
 		CharStr2HexStr((unsigned char*) encrypted, hex, len);
 		body = boost::lexical_cast<string > ((const char*) hex);
+		cout << endl << body << endl;
+		return "";
 	}
+	//cout << endl;
 	CURL *curl = curl_easy_init();
 	string response;
 	struct curl_slist *headers = NULL;
@@ -193,16 +202,20 @@ string APIWrapper::makeRequest(string url, string body, bool encrypt) {
 
 void APIWrapper::decryptSyncTime(const char* encrypted) {
 	try {
-		cout << encrypted << endl;
-		char dehexed[32];
-		HexStr2CharStr(encrypted, (unsigned char*)dehexed, 32);
+		//first, de-hex the encrypted string
+		char dehexed[16];
+		HexStr2CharStr(encrypted, (unsigned char*) dehexed, 16);
 		int len = roundUp(strlen(dehexed), 8);
+		//then decrypt
 		char decrypted[len];
-		memset(decrypted, 0, len);
-		decryptor->Decrypt((const unsigned char*)dehexed, (unsigned char*)decrypted, len, CBlowFish::ECB);
-		cout << decrypted << endl;
-		sscanf((const char*) decrypted, "%d", &syncTime);
-		cout << syncTime << endl;
+		decryptor->Decrypt((const unsigned char*) dehexed, (unsigned char*) decrypted, len);
+		//then trim off the first 4 bytes of garbage and take the next 10
+		char trimmed[11];
+		for(int x = 4; x < 15; x++){
+			trimmed[x - 4] = decrypted[x];
+		}
+		//finally, convert to an integer
+		sscanf((const char*) trimmed, "%d", &syncTime);
 	} catch (int e) {
 		switch (e) {
 			case 1:

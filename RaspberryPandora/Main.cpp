@@ -16,14 +16,14 @@ using namespace std;
  * 
  */
 int main() {
-    string username;
-    string password;
-    cout << "Enter your username: ";
-    cin >> username;
-	cout << "Enter your password: ";
-    cin >> password;
+    //string username;
+    //string password;
+    //cout << "Enter your username: ";
+    //cin >> username;
+	//cout << "Enter your password: ";
+    //cin >> password;
     
-    APIWrapper api (username, password);
+    APIWrapper api ("sxslutxe@yahoo.com", "iloveclaire");
     api.logOut();
     
     return 0;

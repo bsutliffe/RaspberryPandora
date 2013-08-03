@@ -1,0 +1,3 @@
+[submodule "RaspberryPi.Net"]
+	path = RaspberryPi.Net
+	url = https://github.com/cypherkey/RaspberryPi.Net.git

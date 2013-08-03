@@ -12,3 +12,17 @@ C:\Users\Brian\Documents\Visual Studio 2012\Projects\RaspberryPandora\RaspberryP
 C:\Users\Brian\Documents\Visual Studio 2012\Projects\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.application
 C:\Users\Brian\Documents\Visual Studio 2012\Projects\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.exe
 C:\Users\Brian\Documents\Visual Studio 2012\Projects\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.pdb
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.exe
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.pdb
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\bin\Debug\libbcm2835.so
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\bin\Debug\RaspberryPandora.exe.manifest
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\bin\Debug\RaspberryPandora.application
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\bin\Debug\RaspberryPandora.exe
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\bin\Debug\RaspberryPandora.pdb
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\bin\Debug\gstreamer-sharp.dll
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\bin\Debug\RaspberryPiDotNet.dll
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\bin\Debug\RaspberryPiDotNet.pdb
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\bin\Debug\RaspberryPiDotNet.xml
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.csprojResolveAssemblyReference.cache
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.exe.manifest
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.application

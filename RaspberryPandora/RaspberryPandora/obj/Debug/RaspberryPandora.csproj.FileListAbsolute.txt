@@ -26,3 +26,7 @@ C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\bin\
 C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.csprojResolveAssemblyReference.cache
 C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.exe.manifest
 C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.application
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.MainForm.resources
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.csproj.GenerateResource.Cache
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.Properties.Resources.resources
+C:\Users\Brian\Documents\RaspberryPandora\RaspberryPandora\RaspberryPandora\obj\Debug\RaspberryPandora.LoginForm.resources

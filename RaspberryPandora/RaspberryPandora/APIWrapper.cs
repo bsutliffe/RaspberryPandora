@@ -25,7 +25,8 @@ namespace RaspberryPandora {
 			partnerLogin();
 		}
 
-		public Station[] UserLogin(string username, string password) {
+		public Station[] UserLogin(string username, string password, out bool success) {
+			success = false;
 			string body = @"{
 				""loginType"": ""user"",
 				""username"": """ + username + @""",
@@ -43,6 +44,7 @@ namespace RaspberryPandora {
 			string status = makeRequest("auth.userLogin", body, out response);
 			List<Station> stationList = new List<Station>();
 			if(status == "ok"){
+				success = true;
 				userID = response.ContainsKey("userId") ? response["userId"] as string : null;
 				if (response.ContainsKey("userAuthToken"))
 					authToken = response["userAuthToken"] as string;
@@ -85,7 +87,7 @@ namespace RaspberryPandora {
 						AlbumName = (string)thisSong["albumName"],
 						AlbumArtURL = (string)thisSong["albumArtUrl"],
 						AudioURL = (string)thisSong["additionalAudioUrl"],
-						ThumbsUp = thisSong["songRating"] as int? == 1
+						ThumbsUp = (int)thisSong["songRating"] == 1
 					});
 				}
 			}

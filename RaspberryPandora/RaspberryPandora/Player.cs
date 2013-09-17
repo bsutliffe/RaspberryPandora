@@ -35,6 +35,12 @@ namespace RaspberryPandora {
 			}
 		}
 
+		public Song[] Playlist {
+			get {
+				return playlist.ToArray();
+			}
+		}
+
 		public delegate void SongEventHandler(object sender, Song song);
 		public delegate void StationEventHandler(object sender, Station station);
 
@@ -43,6 +49,7 @@ namespace RaspberryPandora {
 		public event SongEventHandler SongUnPaused;
 		public event SongEventHandler SongRatingChanged;
 		public event EventHandler Buffering;
+		public event EventHandler InvalidLogin;
 		public event StationEventHandler StationChanged;
 
 		public Player() {
@@ -56,7 +63,13 @@ namespace RaspberryPandora {
 		}
 
 		public void LogIn(string username, string password, string stationID = null){
-			stations = api.UserLogin(username, password);
+			bool success;
+			stations = api.UserLogin(username, password, out success);
+			if (!success) {
+				EventHandler invalidLoginHandler = InvalidLogin;
+				if (invalidLoginHandler != null)
+					invalidLoginHandler(this, null);
+			}
 			if (stations.Length == 0)
 				return;
 			bool stationIDStored = false;
@@ -72,6 +85,9 @@ namespace RaspberryPandora {
 			}
 			if (!stationIDStored)
 				PreferencesManager.SetPreference(Preferences.StationID, stations[currentStation].Token);
+			StationEventHandler stationChangedHandler = StationChanged;
+			if (stationChangedHandler != null)
+				stationChangedHandler(this, stations[currentStation]);
 			playNext();
 		}
 
@@ -172,6 +188,10 @@ namespace RaspberryPandora {
 				playNext();
 			if (bufferPosition < (playlist.Count - 1))
 				ThreadPool.QueueUserWorkItem(o => bufferNext());
+		}
+
+		public Song GetNextSong() {
+			return playlist.Count > (playlistPosition + 1) ? playlist[playlistPosition + 1] : null;
 		}
 
 		private void bufferNext() {

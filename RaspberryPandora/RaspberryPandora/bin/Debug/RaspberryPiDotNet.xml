@@ -78,7 +78,7 @@
             <param name="pin">The pin who's value to get</param>
             <returns>The value of the pin</returns>
         </member>
-        <member name="M:RaspberryPiDotNet.GPIO.CreatePin(RaspberryPiDotNet.GPIOPins,RaspberryPiDotNet.GPIODirection)">
+        <member name="M:RaspberryPiDotNet.GPIO.CreatePin(RaspberryPiDotNet.GPIOPins,RaspberryPiDotNet.GPIODirection,System.Boolean)">
             <summary>
             Creates a pin if it has not already been created (exported), creates a GPIOMem if possible, otherwise falls back to GPIOFile.
             </summary>

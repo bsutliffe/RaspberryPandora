@@ -54,29 +54,38 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RaspberryPandora.exe" size="73216">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RaspberryPandora.exe" size="88064">
       <assemblyIdentity name="RaspberryPandora" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>8CqDXMWGVgyJDigJR4lagwJX9Ms=</dsig:DigestValue>
+        <dsig:DigestValue>Qai60yMIwJEcdvUl3oe78VFvEwU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RaspberryPiDotNet.dll" size="29696">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RaspberryPiDotNet.dll" size="30208">
       <assemblyIdentity name="RaspberryPiDotNet" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>NYWb3cmwpkgf9RSSOXvRgGoLW3c=</dsig:DigestValue>
+        <dsig:DigestValue>mzlMA2f5KyD3biYmli+agHscHfs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
+  <file name="assets\thumbs_up.png" size="4033">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>FEk3VN7Abk6WigBHbOk4Hurw5/s=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="libbcm2835.so" size="45002">
     <hash>
       <dsig:Transforms>
@@ -86,4 +95,4 @@
       <dsig:DigestValue>NRJwN7EQmXiLcMCrFQbWB7uPsyk=</dsig:DigestValue>
     </hash>
   </file>
-<publisherIdentity name="CN=MACMINI\Brian" issuerKeyHash="d5c34564ff1f180929f3908861683b172caed600" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>jc24VT52llMIjNJxRThQ0261XPY=</DigestValue></Reference></SignedInfo><SignatureValue>ShkjBDKw7PQhIJ+zkkr0myT0wo1QbuM9RWszYK+jrMIt6+WG+Wb3b0xmaJ+Lu3CzZQzIdGIxVrBytckF0DQYL7UXDzEmckOj6m8b0ndDjW+A1KggU1o8udtXIS2vKnEQtzJW0AeidrKMNSkDbZmQeHi0XgMNSBWdYechSdujQxs=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>r+HLpr68NDsZpd+7Q4pbyRXFpLpOHiF4zLvVqXelbHJ/8ss9bUnyZvybpdCaHGpMCTUy3EvUHY1ohqhNLuhPo921zrsoH6udklwxmMwu21WQeETNd16WaRV13xmSn3cD3He3de/x1sFIdTx7opSbThKcysmeFDzJ9KJKni1nKsE=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="f65cb56ed350384571d28c085396763e55b8cd8d" Description="" Url=""><as:assemblyIdentity name="RaspberryPandora.exe" version="1.0.0.0" publicKeyToken="908a129901207460" language="neutral" processorArchitecture="x86" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=MACMINI\Brian</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>vwzQRy+oZ5J7savoYmjAvM7K4c4=</DigestValue></Reference></SignedInfo><SignatureValue>l+DCnwPp1ObClUzpt8SMrtZDumcpWcAoBA7HNmNxdD/wsedpWFwB+SCGqNQpPcQFg/fuUrBN+cycIfssNCWKgB7SQPxJ4oFNiNtaVyVl1r8rrZGxC81GGGAYxtbhqoFO4gVyGBnOmGEduZ3IahMlTwRZYNd83kgqw9qTIFtqlfM=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>r+HLpr68NDsZpd+7Q4pbyRXFpLpOHiF4zLvVqXelbHJ/8ss9bUnyZvybpdCaHGpMCTUy3EvUHY1ohqhNLuhPo921zrsoH6udklwxmMwu21WQeETNd16WaRV13xmSn3cD3He3de/x1sFIdTx7opSbThKcysmeFDzJ9KJKni1nKsE=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIBzTCCATagAwIBAgIQHjPxASeDlKFDTUOeCS3wDzANBgkqhkiG9w0BAQUFADAlMSMwIQYDVQQDHhoATQBBAEMATQBJAE4ASQBcAEIAcgBpAGEAbjAeFw0xMzAzMTAxNjIwNTJaFw0xNDAzMTAyMjIwNTJaMCUxIzAhBgNVBAMeGgBNAEEAQwBNAEkATgBJAFwAQgByAGkAYQBuMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCv4cumvrw0Oxml37tDilvJFcWkuk4eIXjMu9Wpd6Vscn/yyz1tSfJm/Jul0JocakwJNTLcS9QdjWiGqE0u6E+j3bXOuygfq52SXDGYzC7bVZB4RM13XpZpFXXfGZKfdwPcd7d17/HWwUh1PHuilJtOEpzKyZ4UPMn0okqeLWcqwQIDAQABMA0GCSqGSIb3DQEBBQUAA4GBAJx/eLOYHVgZi8JxPdTLRPLOG4V62Vl66YVGCYvThwnB2UaHuj7xPyv/LQX6a55TTwKodV6coGrA8x469cNS5OB0jCMZ8XtvbCQwTS6DGQ2FQu0yK8g4tKO5pkw1NCfTAfrIWPEAHFtZUPVVpt9/AuCI+t9PqYLSD999BaqkzkwH</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
+<publisherIdentity name="CN=MACMINI\Brian" issuerKeyHash="d5c34564ff1f180929f3908861683b172caed600" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>Iu7MO7HBG+20Gg+Keaxw14cbIKo=</DigestValue></Reference></SignedInfo><SignatureValue>H3QC7p2i0v7XZdB2M3p0EtD4/xrZsSJxh67gRfEcBk48LfGm9XmixLCDI9XRRCVIQA3mkkhYvs639cnDwWOGQeROjoIVugw8qUqGO8s6+GBY9/yHQkgy3ZZuXe6N3neOJiFmqSDhDyHE9KxQAYcKc8qv4NPepGrt2SSNuqKGuiw=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>r+HLpr68NDsZpd+7Q4pbyRXFpLpOHiF4zLvVqXelbHJ/8ss9bUnyZvybpdCaHGpMCTUy3EvUHY1ohqhNLuhPo921zrsoH6udklwxmMwu21WQeETNd16WaRV13xmSn3cD3He3de/x1sFIdTx7opSbThKcysmeFDzJ9KJKni1nKsE=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="aa201b87d770ac798a0f1ab4ed1bc1b13bccee22" Description="" Url=""><as:assemblyIdentity name="RaspberryPandora.exe" version="1.0.0.0" publicKeyToken="908a129901207460" language="neutral" processorArchitecture="x86" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=MACMINI\Brian</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>RZGeEiqYX8MoZdELyynU33m+bQY=</DigestValue></Reference></SignedInfo><SignatureValue>Y0/sAq2RBYQL/Mhd/g3e4pnzbNjtZHxo9zN/fbv688oW9zUxsGqkXwJlIBcMk07G7Hdaf0Bf8DodG1JBOk2wZd7foi+Noi65U2OTYyz9RLM1IdLhqEjPhFOGCexBHffCs+/fRem4ZwOIt67uSOg1u/R54nl5LZyinb3aXujTecQ=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>r+HLpr68NDsZpd+7Q4pbyRXFpLpOHiF4zLvVqXelbHJ/8ss9bUnyZvybpdCaHGpMCTUy3EvUHY1ohqhNLuhPo921zrsoH6udklwxmMwu21WQeETNd16WaRV13xmSn3cD3He3de/x1sFIdTx7opSbThKcysmeFDzJ9KJKni1nKsE=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIBzTCCATagAwIBAgIQHjPxASeDlKFDTUOeCS3wDzANBgkqhkiG9w0BAQUFADAlMSMwIQYDVQQDHhoATQBBAEMATQBJAE4ASQBcAEIAcgBpAGEAbjAeFw0xMzAzMTAxNjIwNTJaFw0xNDAzMTAyMjIwNTJaMCUxIzAhBgNVBAMeGgBNAEEAQwBNAEkATgBJAFwAQgByAGkAYQBuMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCv4cumvrw0Oxml37tDilvJFcWkuk4eIXjMu9Wpd6Vscn/yyz1tSfJm/Jul0JocakwJNTLcS9QdjWiGqE0u6E+j3bXOuygfq52SXDGYzC7bVZB4RM13XpZpFXXfGZKfdwPcd7d17/HWwUh1PHuilJtOEpzKyZ4UPMn0okqeLWcqwQIDAQABMA0GCSqGSIb3DQEBBQUAA4GBAJx/eLOYHVgZi8JxPdTLRPLOG4V62Vl66YVGCYvThwnB2UaHuj7xPyv/LQX6a55TTwKodV6coGrA8x469cNS5OB0jCMZ8XtvbCQwTS6DGQ2FQu0yK8g4tKO5pkw1NCfTAfrIWPEAHFtZUPVVpt9/AuCI+t9PqYLSD999BaqkzkwH</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

@@ -8,15 +8,22 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace RaspberryPandora {
 	class Program {
 		private static Player player;
 		private static bool buttonsInitialized = false;
-		private static LCDWrapper lcd;
+		//private static LCDWrapper lcd;
 		private static System.Timers.Timer shutdownTimer;
 
-		static void Main(string[] args) {
+		private const bool FORCE_FILE_GPIO = false;
+
+		private static MainForm mainForm;
+
+		static void Main() {
+			Application.EnableVisualStyles();
+
 			/*lcd = new LCDWrapper(
 				rs: GPIOPins.V2_GPIO_24,
 				enable: GPIOPins.V2_GPIO_17,
@@ -28,44 +35,32 @@ namespace RaspberryPandora {
 				rows: 2,
 				displayMode: System.Environment.OSVersion.Platform == PlatformID.Win32NT ? DisplayMode.CONSOLE_ONLY : DisplayMode.BOTH
 			);*/
-			lcd = new LCDWrapper(
-				rs: GPIOPins.V2_GPIO_24,
-				enable: GPIOPins.V2_GPIO_17,
-				d0: GPIOPins.V2_GPIO_09,
-				d1: GPIOPins.V2_GPIO_10,
-				d2: GPIOPins.V2_GPIO_11,
-				d3: GPIOPins.V2_GPIO_14,
-				d4: GPIOPins.V2_GPIO_18,
-				d5: GPIOPins.V2_GPIO_27,
-				d6: GPIOPins.V2_GPIO_22,
-				d7: GPIOPins.V2_GPIO_23,
-				columns: 40,
-				rows: 2,
-				displayMode: System.Environment.OSVersion.Platform == PlatformID.Win32NT ? DisplayMode.CONSOLE_ONLY : DisplayMode.BOTH
-			);
 
 			shutdownTimer = new System.Timers.Timer(20000);
 			shutdownTimer.Elapsed += shutdownTimer_Elapsed;
 			shutdownTimer.AutoReset = false;
-			
-			string username = PreferencesManager.ReadPreference(Preferences.Username);
-			string password = PreferencesManager.ReadPreference(Preferences.Password);
-			string stationID = PreferencesManager.ReadPreference(Preferences.StationID);
-			if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password)) {
-				Console.WriteLine("Enter your username: ");
-				username = Console.ReadLine();
-				Console.WriteLine("Enter your password: ");
-				ConsoleKeyInfo key = Console.ReadKey(true);
-				while (key.Key != ConsoleKey.Enter) {
-					if(!char.IsControl(key.KeyChar))
-						password += key.KeyChar;
-					key = Console.ReadKey(true);
-				}
-				PreferencesManager.SetPreference(Preferences.Username, username);
-				PreferencesManager.SetPreference(Preferences.Password, password);
-			}
 
-			lcd.Write("Connecting to Pandora...");
+			mainForm = new MainForm();
+			mainForm.Reset();
+
+			mainForm.KeyUp += mainForm_KeyUp;
+
+			ThreadPool.QueueUserWorkItem(o => connect());
+			
+			Application.Run(mainForm);
+		}
+
+		static void mainForm_KeyUp(object sender, KeyEventArgs e) {
+			switch (e.KeyCode) {
+				case Keys.Escape:
+					Application.Exit();
+					break;
+			}
+		}
+
+		private static void connect() {
+			//lcd.Write("Connecting to Pandora...");
+			mainForm.SetStation("Connecting to Pandora...");
 			player = new Player();
 
 			player.PlayingSong += player_PlayingSong;
@@ -74,40 +69,61 @@ namespace RaspberryPandora {
 			player.Buffering += player_Buffering;
 			player.SongRatingChanged += player_SongRatingChanged;
 			player.StationChanged += player_StationChanged;
+			player.InvalidLogin += player_InvalidLogin;
 
-			lcd.Write("Logging in...");
-			new Thread(o => player.LogIn(username, password, stationID)).Start();
+			string username = PreferencesManager.ReadPreference(Preferences.Username);
+			string password = PreferencesManager.ReadPreference(Preferences.Password);
+			if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+				showLogin();
+			else
+				logIn(username, password);
+		}
 
-			Console.ReadKey(true);
+		private static void logIn(string username, string password) {
+			string stationID = PreferencesManager.ReadPreference(Preferences.StationID);
+			//lcd.Write("Logging in...");
+			mainForm.SetStation("Logging in...");
+			player.LogIn(username, password, stationID);
 		}
 
 		private static void initializeButtons() {
 			buttonsInitialized = true;
-			GPIO playPauseButton = GPIO.CreatePin(GPIOPins.V2_GPIO_04, GPIODirection.In);
-			GPIO rewindButton = GPIO.CreatePin(GPIOPins.V2_GPIO_07, GPIODirection.In);
-			GPIO nextSongButton = GPIO.CreatePin(GPIOPins.V2_GPIO_08, GPIODirection.In);
-			//GPIO thumbsUpButton = GPIO.CreatePin(GPIOPins.V2_GPIO_09, GPIODirection.In);
-			//GPIO thumbsDownButton = GPIO.CreatePin(GPIOPins.V2_GPIO_10, GPIODirection.In);
-			//GPIO nextStationButton = GPIO.CreatePin(GPIOPins.V2_GPIO_11, GPIODirection.In);
-			//GPIO prevStationButton = GPIO.CreatePin(GPIOPins.V2_GPIO_14, GPIODirection.In);
-			GPIO powerToggle = GPIO.CreatePin(GPIOPins.V2_GPIO_25, GPIODirection.In);
+			GPIO playPauseButton = GPIO.CreatePin(GPIOPins.V2_GPIO_04, GPIODirection.In, FORCE_FILE_GPIO);
+			GPIO rewindButton = GPIO.CreatePin(GPIOPins.V2_GPIO_07, GPIODirection.In, FORCE_FILE_GPIO);
+			GPIO nextSongButton = GPIO.CreatePin(GPIOPins.V2_GPIO_08, GPIODirection.In, FORCE_FILE_GPIO);
+			GPIO thumbsUpButton = GPIO.CreatePin(GPIOPins.V2_GPIO_09, GPIODirection.In, FORCE_FILE_GPIO);
+			GPIO thumbsDownButton = GPIO.CreatePin(GPIOPins.V2_GPIO_10, GPIODirection.In, FORCE_FILE_GPIO);
+			GPIO nextStationButton = GPIO.CreatePin(GPIOPins.V2_GPIO_11, GPIODirection.In, FORCE_FILE_GPIO);
+			GPIO prevStationButton = GPIO.CreatePin(GPIOPins.V2_GPIO_14, GPIODirection.In, FORCE_FILE_GPIO);
+			GPIO powerToggle = GPIO.CreatePin(GPIOPins.V2_GPIO_25, GPIODirection.In, FORCE_FILE_GPIO);
 			playPauseButton.AddChangeListener(pinChanged);
 			rewindButton.AddChangeListener(pinChanged);
 			nextSongButton.AddChangeListener(pinChanged);
-			//thumbsUpButton.AddChangeListener(pinChanged);
-			//thumbsDownButton.AddChangeListener(pinChanged);
-			//nextStationButton.AddChangeListener(pinChanged);
-			//prevStationButton.AddChangeListener(pinChanged);
+			thumbsUpButton.AddChangeListener(pinChanged);
+			thumbsDownButton.AddChangeListener(pinChanged);
+			nextStationButton.AddChangeListener(pinChanged);
+			prevStationButton.AddChangeListener(pinChanged);
 			powerToggle.AddChangeListener(pinChanged);
+		}
+
+		private static void showLogin() {
+			LoginForm loginForm = new LoginForm();
+			loginForm.Submitted += delegate(object sender, string username, string password) {
+				PreferencesManager.SetPreference(Preferences.Username, username);
+				PreferencesManager.SetPreference(Preferences.Password, password);
+				loginForm.Close();
+				logIn(username, password);
+			};
+			loginForm.Show();
 		}
 
 
 		private static void player_SongRatingChanged(object sender, Song song) {
-			OutputNowPlaying(song);
+			mainForm.ThumbsUp(song.ThumbsUp);
 		}
 
 		private static void player_Buffering(object sender, EventArgs e) {
-			lcd.Write("Buffering...");
+			//lcd.Write("Buffering...");
 		}
 
 		private static void player_SongUnPaused(object sender, Objects.Song song) {
@@ -119,28 +135,29 @@ namespace RaspberryPandora {
 		}
 
 		private static void player_PlayingSong(object sender, Objects.Song song) {
-			OutputNowPlaying(song);
+			mainForm.SetTrackInfo(song.SongName, song.ArtistName, song.AlbumName);
+			mainForm.SetAlbumArt(song.AlbumArtURL);
+			mainForm.ThumbsUp(song.ThumbsUp);
+			Song nextSong = player.GetNextSong();
+			mainForm.SetNextInfo(nextSong == null ? "unknown" : nextSong.SongName, nextSong == null ? "unknown" : nextSong.ArtistName);
 			if (!buttonsInitialized)
 				initializeButtons();
 		}
 
 		private static void player_StationChanged(object sender, Objects.Station station) {
-			lcd.Write(station.Name);
+			//lcd.Write(station.Name);
+			mainForm.SetStation(station.Name);
 		}
 
-		private static void OutputNowPlaying(Song song) {
-			string[] lines = new string[]{
-				(song.ThumbsUp ? "* " : "") + song.SongName,
-				song.ArtistName + " / " + song.AlbumName
-			};
-			lcd.Write(lines);
+		static void player_InvalidLogin(object sender, EventArgs e) {
+			showLogin();
 		}
 
 
 		private static void pinChanged(GPIO pin, bool value) {
 			if ((int)pin.Pin == (int)GPIOPins.V2_GPIO_25) {
 				//Power Toggle
-				lcd.Power(value);
+				//lcd.Power(value);
 				if (value) {
 					player.WakeUp();
 					shutdownTimer.Stop();

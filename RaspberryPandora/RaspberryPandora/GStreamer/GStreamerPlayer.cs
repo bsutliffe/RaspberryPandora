@@ -16,7 +16,10 @@ namespace RaspberryPandora.GStreamer {
 		private Bin bin = null;
 		private int playRetries = 0;
 
+		public delegate void ProgressEventHandler(object sender, int position, int duration, double progress);
+
 		public event EventHandler Stopped;
+		public event ProgressEventHandler Progress;
 
 		public State State {
 			get {
@@ -31,9 +34,9 @@ namespace RaspberryPandora.GStreamer {
 			loop = new MainLoop();
 			pipeline = new Pipeline("audio-player");
 			try {
-				bin = (Bin)Parse.Launch("filesrc name=my_filesrc ! flump3dec ! alsasink");
+				bin = (Bin)Parse.Launch("filesrc name=my_filesrc ! progressreport update-freq=1 ! flump3dec ! alsasink");
 			} catch {
-				bin = (Bin)Parse.Launch("filesrc name=my_filesrc ! mad ! autoaudiosink");
+				bin = (Bin)Parse.Launch("filesrc name=my_filesrc ! progressreport update-freq=1 ! mad ! autoaudiosink");
 			}
 			if (bin == null)
 				throw new Exception("Parse error.");
@@ -100,6 +103,22 @@ namespace RaspberryPandora.GStreamer {
 					EventHandler handler = Stopped;
 					if(handler != null)
 						handler(this, EventArgs.Empty);
+					break;
+				case MessageType.Element:
+					if (message.Structure.Name == "progress") {
+						double progress = (double)message.Structure["percent-double"];
+						long curTime;
+						long duration;
+						Gst.Format format = Gst.Format.Time;
+						bin.QueryPosition(ref format, out curTime);
+						bin.QueryDuration(ref format, out duration);
+						ProgressEventHandler progressHandler = Progress;
+						if (progressHandler != null)
+							progressHandler(this, (int)(curTime / 1000000000), (int)(duration / 1000000000), progress);
+					}
+					break;
+				default:
+					//File.AppendAllLines("log.txt", new string[] { message.Type.ToString() });
 					break;
 			}
 			return true;

@@ -43,7 +43,9 @@ namespace RaspberryPandora {
 
 		public delegate void SongEventHandler(object sender, Song song);
 		public delegate void StationEventHandler(object sender, Station station);
+		public delegate void ProgressEventHandler(object sender, int position, int duration, double progress);
 
+		public event ProgressEventHandler Progress;
 		public event SongEventHandler PlayingSong;
 		public event SongEventHandler SongPaused;
 		public event SongEventHandler SongUnPaused;
@@ -55,6 +57,7 @@ namespace RaspberryPandora {
 		public Player() {
 			api = new APIWrapper();
 			gStreamer.Stopped += gStreamer_Stopped;
+			gStreamer.Progress += gStreamer_Progress;
 			clearCacheDirectory();
 		}
 
@@ -281,8 +284,13 @@ namespace RaspberryPandora {
 
 
 		private void gStreamer_Stopped(object sender, EventArgs e) {
-			//Console.WriteLine("end of song");
 			playNext();
+		}
+
+		void gStreamer_Progress(object sender, int position, int duration, double progress) {
+			ProgressEventHandler handler = Progress;
+			if (handler != null)
+				handler.Invoke(this, position, duration, progress);
 		}
 	}
 }

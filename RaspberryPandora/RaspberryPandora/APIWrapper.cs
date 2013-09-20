@@ -80,6 +80,7 @@ namespace RaspberryPandora {
 				List<object> songObjList = response["items"] as List<object>;
 				foreach (object songObj in songObjList) {
 					Dictionary<string, object> thisSong = (Dictionary<string, object>)songObj;
+					long? rating = thisSong["songRating"] as long?;
 					songList.Add(new Song {
 						SongID = (string)thisSong["trackToken"],
 						SongName = (string)thisSong["songName"],
@@ -87,7 +88,7 @@ namespace RaspberryPandora {
 						AlbumName = (string)thisSong["albumName"],
 						AlbumArtURL = (string)thisSong["albumArtUrl"],
 						AudioURL = (string)thisSong["additionalAudioUrl"],
-						ThumbsUp = (int)thisSong["songRating"] == 1
+						ThumbsUp = rating == 1
 					});
 				}
 			}

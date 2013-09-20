@@ -63,6 +63,16 @@ namespace RaspberryPandora.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Invisible {
+            get {
+                object obj = ResourceManager.GetObject("Invisible", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap thumbs_up {
             get {
                 object obj = ResourceManager.GetObject("thumbs_up", resourceCulture);

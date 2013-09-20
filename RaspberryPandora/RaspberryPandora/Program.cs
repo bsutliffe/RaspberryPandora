@@ -1,6 +1,7 @@
 ﻿using RaspberryPandora.Objects;
 using RaspberryPiDotNet;
 using RaspberryPiDotNet.MicroLiquidCrystal;
+using SunriseCalculator;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -42,6 +43,7 @@ namespace RaspberryPandora {
 
 			mainForm = new MainForm();
 			mainForm.Reset();
+			setNightMode();
 
 			mainForm.KeyUp += mainForm_KeyUp;
 
@@ -70,6 +72,7 @@ namespace RaspberryPandora {
 			player.SongRatingChanged += player_SongRatingChanged;
 			player.StationChanged += player_StationChanged;
 			player.InvalidLogin += player_InvalidLogin;
+			player.Progress += player_Progress;
 
 			string username = PreferencesManager.ReadPreference(Preferences.Username);
 			string password = PreferencesManager.ReadPreference(Preferences.Password);
@@ -117,6 +120,11 @@ namespace RaspberryPandora {
 			loginForm.Show();
 		}
 
+		private static void setNightMode() {
+			SolarInfo solarInfo = SolarInfo.ForDate(41.23070, -73.06404, DateTime.Now); //hard-coded to Milford, CT
+			mainForm.NightMode(solarInfo.Sunset < DateTime.Now || solarInfo.Sunrise > DateTime.Now);
+		}
+
 
 		private static void player_SongRatingChanged(object sender, Song song) {
 			mainForm.ThumbsUp(song.ThumbsUp);
@@ -142,6 +150,12 @@ namespace RaspberryPandora {
 			mainForm.SetNextInfo(nextSong == null ? "unknown" : nextSong.SongName, nextSong == null ? "unknown" : nextSong.ArtistName);
 			if (!buttonsInitialized)
 				initializeButtons();
+			setNightMode();
+		}
+
+
+		static void player_Progress(object sender, int position, int duration, double progress) {
+			mainForm.SetProgress(position, duration);
 		}
 
 		private static void player_StationChanged(object sender, Objects.Station station) {

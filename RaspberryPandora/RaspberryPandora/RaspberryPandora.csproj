@@ -123,13 +123,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SolarInfo\SolarInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\thumbs_up.png" />
     <Content Include="libbcm2835.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Invisible.png" />
     <None Include="RaspberryPandora_TemporaryKey.pfx" />
+    <None Include="SolarInfo\.git" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

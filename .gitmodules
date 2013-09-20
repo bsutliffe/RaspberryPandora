@@ -1,3 +1,6 @@
 [submodule "RaspberryPi.Net"]
 	path = RaspberryPi.Net
 url=https://github.com/bsutliffe/RaspberryPi.Net.git
+[submodule "RaspberryPandora/RaspberryPandora/SolarInfo"]
+	path = RaspberryPandora/RaspberryPandora/SolarInfo
+	url = https://gist.github.com/767532.git
